@@ -1,14 +1,41 @@
 import React, { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
-
-const Register = () => {
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+const Register = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  let navigate = useNavigate();
 
-  const handleClick = async () => {
-    console.log(name, email, password);
+  const handleClick = async (e) => {
+    // console.log(name, email, password);
+    try {
+      e.preventDefault();
+      const { data } = await axios.post("http://localhost:8000/api/register", {
+        name,
+        email,
+        password,
+      });
+      console.log(data);
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        // toast.success("Registration successful. Please login");
+        setName("");
+        setEmail("");
+        setPassword("");
+        toast.success(
+          `Hey ${data.user.name}. You are part of tema now. Congrats!`
+        );
+        navigate("/login");
+      }
+    } catch (err) {
+      console.error(toast);
+      toast.error("Something went wrong, try again");
+    }
   };
 
   return (
@@ -34,7 +61,9 @@ const Register = () => {
               value={password}
               setValue={setPassword}
             />
-
+            <div className="row">
+              <pre>{JSON.stringify({ name, email, password }, null, 4)}</pre>
+            </div>
             <div className="d-grid">
               <Button
                 handleClick={handleClick}
