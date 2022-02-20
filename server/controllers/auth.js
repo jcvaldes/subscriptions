@@ -1,5 +1,6 @@
 import User from "../models/user";
 import { hashPassword, comparePassword } from "../helpers/auth";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
@@ -29,10 +30,48 @@ export const register = async (req, res) => {
       email,
       password: hashedPassword,
     }).save();
+    // create signed token
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
     // elimino el password de la respuesta
     const { password: passwordEncrypted, ...rest } = user._doc;
     console.log(rest);
     return res.json({
+      token,
+      user: rest,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    // check email
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res.json({
+        error: "No user found",
+      });
+    }
+    // check password
+    const match = await comparePassword(req.body.password, user.password);
+    if (!match) {
+      return res.json({
+        error: "Wrong password",
+      });
+    }
+    // create signed token
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    const { password, ...rest } = user._doc;
+
+    res.json({
+      token,
       user: rest,
     });
   } catch (err) {

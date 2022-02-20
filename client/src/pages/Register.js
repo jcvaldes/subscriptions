@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-const Register = ({ history }) => {
+const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +30,8 @@ const Register = ({ history }) => {
         toast.success(
           `Hey ${data.user.name}. You are part of tema now. Congrats!`
         );
-        navigate("/login");
+        localStorage.setItem("auth", JSON.stringify(data));
+        navigate("/");
       }
     } catch (err) {
       console.error(toast);
