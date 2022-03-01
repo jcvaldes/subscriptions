@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   let navigate = useNavigate();
-
+  // context
+  const [state, setState] = useContext(UserContext);
   const handleClick = async (e) => {
     // console.log(name, email, password);
     try {
@@ -30,6 +32,7 @@ const Register = () => {
         toast.success(
           `Hey ${data.user.name}. You are part of tema now. Congrats!`
         );
+        setState(data);
         localStorage.setItem("auth", JSON.stringify(data));
         navigate("/");
       }

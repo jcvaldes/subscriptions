@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // context
+  const [state, setState] = useContext(UserContext);
   let navigate = useNavigate();
   const handleClick = async (e) => {
     // console.log("email and password", email, password);
@@ -24,6 +27,8 @@ const Login = () => {
       } else {
         setEmail("");
         setPassword("");
+        setState(data);
+        localStorage.setItem("auth", JSON.stringify(data));
         navigate("/");
       }
     } catch (err) {
@@ -59,7 +64,7 @@ const Login = () => {
               <Button
                 handleClick={handleClick}
                 type="danger"
-                text="Register"
+                text="Login"
                 size="sm"
               />
             </div>

@@ -1,16 +1,24 @@
-import React from "react";
+// eslint-disable-next-line no-unused-vars
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context";
+
 import { isAuth } from "../utils/functions";
 
 const Nav = () => {
+  const [state, setState] = useContext(UserContext);
   let navigate = useNavigate();
 
   const logout = () => {
+    setState({
+      user: {},
+      token: "",
+    });
     localStorage.removeItem("auth");
     navigate("/login");
   };
-
+  // console.log("State =>", state);
   return (
     <ul className="nav border">
       <li className="nav-item">
@@ -19,7 +27,8 @@ const Nav = () => {
         </Link>
       </li>
 
-      {isAuth ? (
+      {/* {isAuth() ? ( */}
+      {state && state.token ? (
         <>
           <li className="nav-item">
             <span onClick={logout} className="nav-link">
