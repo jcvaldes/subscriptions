@@ -1,24 +1,20 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context";
-
-import { isAuth } from "../utils/functions";
 
 const Nav = () => {
   const [state, setState] = useContext(UserContext);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const logout = () => {
-    setState({
-      user: {},
-      token: "",
-    });
+    setState({ user: {}, token: "" });
     localStorage.removeItem("auth");
     navigate("/login");
   };
-  // console.log("State =>", state);
+
+  console.log("STATE => ", state);
+
   return (
     <ul className="nav border">
       <li className="nav-item">
@@ -29,13 +25,31 @@ const Nav = () => {
 
       {/* {isAuth() ? ( */}
       {state && state.token ? (
-        <>
-          <li className="nav-item">
-            <span onClick={logout} className="nav-link">
-              Logout
-            </span>
+        // <>
+        //   <li className="nav-item">
+        //     <span onClick={logout} className="nav-link">
+        //       Logout
+        //     </span>
+        //   </li>
+        // </>
+
+        <div className="nav-item dropdown">
+          <li className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            {state.user.email}
           </li>
-        </>
+          <ul className="dropdown-menu">
+            <li className="nav-item dropdown-item">
+              <Link className="nav-link" to="/account">
+                Account
+              </Link>
+            </li>
+            <li className="nav-item dropdown-item">
+              <span onClick={logout} className="nav-link">
+                Logout
+              </span>
+            </li>
+          </ul>
+        </div>
       ) : (
         <>
           <li className="nav-item">

@@ -7,3 +7,8 @@ Content-Type: application/json
     "password": "test",
     "email": "idevkingos@gmail.com"
 }
+
+### Plans
+GET http://localhost:8000/api/prices
+Content-Type: application/json
+
