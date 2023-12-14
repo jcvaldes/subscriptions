@@ -1,0 +1,14 @@
+### Register user
+GET http://localhost:8000/api/register
+Content-Type: application/json
+
+{
+    "name": "test",
+    "password": "test",
+    "email": "idevkingos@gmail.com"
+}
+
+### Plans
+GET http://localhost:8000/api/prices
+Content-Type: application/json
+
